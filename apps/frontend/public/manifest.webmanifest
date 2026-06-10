@@ -1,0 +1,15 @@
+{
+  "name": "FARMA OGLASI PRO",
+  "short_name": "Farma Pro",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#2E7D32",
+  "icons": [
+    {
+      "src": "/pwa.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

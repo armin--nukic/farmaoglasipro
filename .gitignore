@@ -1,0 +1,14 @@
+node_modules
+dist
+coverage
+.env
+.env.local
+.DS_Store
+*.log
+.vite
+playwright-report
+test-results
+uploads
+minio-data
+postgres-data
+redis-data

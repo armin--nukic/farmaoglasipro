@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f8fafc"/>
+  <rect x="70" y="70" width="1060" height="490" rx="26" fill="#2E7D32"/>
+  <text x="110" y="210" font-family="Arial, sans-serif" font-size="72" font-weight="900" fill="#fff">FARMA OGLASI PRO</text>
+  <text x="110" y="300" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#F9A825">Stoka, farme, oprema i veterinari u BiH</text>
+  <text x="110" y="380" font-family="Arial, sans-serif" font-size="28" fill="#fff">Kupujte, prodajte, rezervisite i pratite zdravlje zivotinja.</text>
+  <circle cx="990" cy="395" r="82" fill="#F9A825"/>
+  <path d="M920 395h140v34H920zM946 388v-72l44-36 44 36v72h-34v-43h-20v43z" fill="#fff"/>
+</svg>
