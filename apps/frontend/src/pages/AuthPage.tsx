@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { BadgeCheck, KeyRound, Mail, Phone, UserRound } from "lucide-react";
 import { Button } from "../components/ui/button";
@@ -21,19 +21,20 @@ declare global {
 }
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
+const googleConfigured = Boolean(googleClientId && !googleClientId.includes("replace-with-google-oauth-client-id"));
 
 export function AuthPage({ mode }: { mode: "login" | "register" }) {
   const { t } = useI18n();
   const auth = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("superadmin@farmaoglasi.pro");
+  const [email, setEmail] = useState(mode === "login" ? "testuser@farmaoglasi.pro" : "");
   const [password, setPassword] = useState("Password123!");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!googleClientId || window.google) return;
+    if (!googleConfigured || window.google) return;
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
@@ -41,7 +42,8 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
     document.body.appendChild(script);
   }, []);
 
-  async function submit() {
+  async function submit(event?: FormEvent<HTMLFormElement>) {
+    event?.preventDefault();
     setError("");
     try {
       if (mode === "login") await auth.login(email, password);
@@ -54,12 +56,17 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
 
   async function googleSubmit() {
     setError("");
-    if (!googleClientId || !window.google) {
-      setError("Google SSO requires VITE_GOOGLE_CLIENT_ID and GOOGLE_CLIENT_ID.");
+    if (!googleConfigured) {
+      setError("Google SSO is optional locally. Add real GOOGLE_CLIENT_ID and VITE_GOOGLE_CLIENT_ID in .env, then rebuild frontend/backend.");
       return;
     }
+    if (!window.google) {
+      setError("Google SSO script is still loading. Try again in a moment.");
+      return;
+    }
+    const clientId = googleClientId!;
     window.google.accounts.id.initialize({
-      client_id: googleClientId,
+      client_id: clientId,
       callback: async (response) => {
         await auth.googleLogin(response.credential);
         navigate("/");
@@ -75,7 +82,7 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
           <BadgeCheck className="text-primary" />
           <h1 className="text-3xl font-black">{mode === "login" ? t.login : t.register}</h1>
         </div>
-        <div className="space-y-3">
+        <form className="space-y-3" onSubmit={submit}>
           {mode === "register" && (
             <>
               <label className="text-sm font-bold">{t.fullName}</label>
@@ -89,9 +96,12 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
           <label className="text-sm font-bold">{t.password}</label>
           <div className="relative"><KeyRound className="absolute left-3 top-2.5 text-slate-400" size={18} /><Input className="pl-10" type="password" value={password} onChange={(event) => setPassword(event.target.value)} /></div>
           {error && <div className="rounded-md bg-danger/10 p-3 text-sm font-bold text-danger">{error}</div>}
-          <Button className="w-full" onClick={submit}>{mode === "login" ? t.login : t.register}</Button>
-          <button className="h-10 w-full rounded-md border border-border bg-white text-sm font-black dark:bg-[#102017]" onClick={googleSubmit}>{t.continueWithGoogle}</button>
-        </div>
+          <Button className="w-full">{mode === "login" ? t.login : t.register}</Button>
+          <button type="button" className="h-10 w-full rounded-md border border-border bg-white text-sm font-black dark:bg-[#102017] disabled:cursor-not-allowed disabled:opacity-60" onClick={googleSubmit} disabled={!googleConfigured}>
+            {googleConfigured ? t.continueWithGoogle : "Google SSO not configured"}
+          </button>
+          {!googleConfigured && <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Local JWT login works now. Google requires real OAuth client IDs in `.env`.</p>}
+        </form>
         <div className="mt-4 text-sm text-slate-600 dark:text-slate-300">
           {mode === "login" ? <Link to="/register">{t.register}</Link> : <Link to="/login">{t.login}</Link>}
         </div>

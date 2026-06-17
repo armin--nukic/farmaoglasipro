@@ -1,5 +1,7 @@
+import { useState, type FormEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Activity, CalendarDays, Gauge, MessageSquareText, Search, Sparkles, Stethoscope, TrendingUp } from "lucide-react";
+import { Link, useNavigate } from "react-router";
+import { Activity, CalendarDays, Crown, Gauge, MessageSquareText, Search, Sparkles, Stethoscope, TrendingUp } from "lucide-react";
 import type { ApiResponse, Listing } from "@farma/shared";
 import { api } from "../lib/api";
 import { demoListings, demoStations, demoVeterinarians } from "../data/demo";
@@ -12,6 +14,8 @@ import { useI18n } from "../i18n";
 
 export function HomePage() {
   const { t } = useI18n();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
   const listings = useQuery({
     queryKey: ["listings", "featured"],
     queryFn: async () => (await api<ApiResponse<Listing[]>>("/listings?featured=true")).data,
@@ -25,18 +29,24 @@ export function HomePage() {
     { Icon: TrendingUp, title: t.priceIndex, label: "Market trends", body: "Popular breeds, views and revenue" }
   ];
 
+  function submitSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const query = search.trim();
+    navigate(query ? `/listings?q=${encodeURIComponent(query)}` : "/listings");
+  }
+
   return (
     <main>
-      <section className="border-b border-border bg-white dark:bg-[#0d1b12]">
+      <section className="border-b border-border bg-white hero-surface dark:bg-[#0d1b12]">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 lg:grid-cols-[1.05fr_0.95fr] lg:py-10">
           <div className="flex flex-col justify-center">
             <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-md bg-primary/10 px-3 py-2 text-sm font-bold text-primary"><Sparkles size={16} />AI smart search + verified sellers</div>
             <h1 className="max-w-3xl text-4xl font-black leading-tight text-slate-950 dark:text-white md:text-6xl">{t.heroTitle}</h1>
             <p className="mt-5 max-w-2xl text-lg text-slate-600 dark:text-slate-300">{t.heroSubtitle}</p>
-            <div className="mt-6 flex max-w-2xl gap-2">
-              <Input placeholder={t.searchPlaceholder} />
-              <Button><Search size={18} />Search</Button>
-            </div>
+            <form className="mt-6 flex max-w-2xl gap-2" onSubmit={submitSearch}>
+              <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t.searchPlaceholder} />
+              <Button><Search size={18} />{t.search}</Button>
+            </form>
             <div className="mt-6 grid max-w-2xl grid-cols-2 gap-3 md:grid-cols-4">
               {[
                 ["300+", "Listings"],
@@ -51,14 +61,29 @@ export function HomePage() {
               ))}
             </div>
           </div>
-          <MapPanel />
+          <div className="space-y-4">
+            <img src="/farma-hero-pro.png" alt="Farma, stoka, oprema i veterinarske usluge" className="w-full rounded-md border border-border object-cover shadow-soft" />
+            <MapPanel compact />
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-border bg-slate-950 py-8 text-white">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="flex flex-col justify-center">
+            <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-md bg-accent px-3 py-2 text-sm font-black text-slate-950"><Crown size={16} />Premium marketplace</div>
+            <h2 className="text-3xl font-black md:text-4xl">Full Access za 5 KM mjesecno</h2>
+            <p className="mt-3 max-w-xl text-slate-300">Izdvojeni oglasi, analitika, verified badge, AI opisi, prioritet u pretrazi i veca vidljivost za prodaju stoke, farmi i opreme.</p>
+            <Link to="/premium" className="mt-5 inline-flex h-11 w-fit items-center justify-center rounded-md bg-primary px-5 text-sm font-black text-white shadow-soft hover:bg-[#256b2a]">{t.fullAccess}</Link>
+          </div>
+          <img src="/marketing-marketplace.png" alt="FARMA OGLASI PRO marketing prikaz" className="min-h-72 w-full rounded-md object-cover shadow-soft" />
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-2xl font-black">{t.featured}</h2>
-          <Button className="bg-slate-950 hover:bg-slate-800">View all</Button>
+          <Link to="/listings" className="inline-flex h-10 items-center justify-center rounded-md bg-slate-950 px-4 text-sm font-semibold text-white hover:bg-slate-800">{t.viewAll}</Link>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {activeListings.map((listing) => <ListingCard key={listing.id} listing={listing} />)}

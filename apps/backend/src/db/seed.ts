@@ -12,12 +12,29 @@ async function seed() {
   const passwordHash = await bcrypt.hash("Password123!", 10);
   await pool.query("BEGIN");
   try {
-    await pool.query("TRUNCATE notifications, messages, conversations, bids, auctions, reviews, appointments, animal_health_records, animals, listings, farms, veterinary_stations, veterinarians, users RESTART IDENTITY CASCADE");
+    await pool.query("TRUNCATE forum_comments, forum_posts, listing_comments, marketplace_categories, notifications, messages, conversations, bids, auctions, reviews, appointments, animal_health_records, animals, listings, farms, veterinary_stations, veterinarians, users RESTART IDENTITY CASCADE");
 
     const superAdmin = await pool.query<IdRow>(
       "INSERT INTO users (email, password_hash, full_name, phone, role, verified, city) VALUES ($1,$2,$3,$4,$5,true,$6) RETURNING id",
       ["superadmin@farmaoglasi.pro", passwordHash, "Super Admin", "+38761000000", "SUPER_ADMIN", "Sarajevo"]
     );
+
+    for (const [type, name] of [
+      ["ANIMAL", "Cattle"],
+      ["ANIMAL", "Sheep"],
+      ["ANIMAL", "Goats"],
+      ["EQUIPMENT", "Tractors"],
+      ["EQUIPMENT", "Trailers"],
+      ["AGRICULTURE", "Hay"],
+      ["AGRICULTURE", "Animal Feed"],
+      ["REAL_ESTATE", "Farms"],
+      ["REAL_ESTATE", "Land"]
+    ]) {
+      await pool.query(
+        "INSERT INTO marketplace_categories (type, name, slug, created_by) VALUES ($1,$2,$3,$4) ON CONFLICT (slug) DO NOTHING",
+        [type, name, `${type}-${name}`.toLowerCase().replace(/[^a-z0-9]+/g, "-"), superAdmin.rows[0]!.id]
+      );
+    }
 
     for (let i = 1; i <= 5; i += 1) {
       await pool.query(

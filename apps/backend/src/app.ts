@@ -11,6 +11,10 @@ import { appointmentsRouter } from "./routes/appointments.js";
 import { authRouter } from "./routes/auth.js";
 import { catalogRouter } from "./routes/catalog.js";
 import { listingsRouter } from "./routes/listings.js";
+import { notificationsRouter } from "./routes/notifications.js";
+import { categoriesRouter } from "./routes/categories.js";
+import { forumRouter } from "./routes/forum.js";
+import { paymentsRouter } from "./routes/payments.js";
 import { errorHandler, notFound } from "./lib/errors.js";
 
 export function createApp() {
@@ -26,6 +30,10 @@ export function createApp() {
   app.get("/health", (_request, response) => response.json({ status: "ok", service: "farma-backend", time: new Date().toISOString() }));
   app.use("/api/auth", authRouter);
   app.use("/api/listings", listingsRouter);
+  app.use("/api/notifications", notificationsRouter);
+  app.use("/api/categories", categoriesRouter);
+  app.use("/api/forum", forumRouter);
+  app.use("/api/payments", paymentsRouter);
   app.use("/api", catalogRouter);
   app.use("/api/appointments", appointmentsRouter);
   app.use("/api/admin", adminRouter);

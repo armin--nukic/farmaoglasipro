@@ -14,12 +14,13 @@ authRouter.post("/register", asyncRoute(async (request, response) => {
   const exists = await query("SELECT id FROM users WHERE email = $1", [payload.email]);
   if (exists.rowCount) throw new ApiError(409, "Email already registered");
   const passwordHash = await bcrypt.hash(payload.password, 12);
-  const result = await query<{ id: string; email: string; role: string }>(
-    "INSERT INTO users (email, password_hash, full_name, phone, role) VALUES ($1,$2,$3,$4,$5) RETURNING id,email,role",
-    [payload.email, passwordHash, payload.fullName, payload.phone ?? null, payload.role]
+  const result = await query<{ id: string; email: string; role: string; full_name: string }>(
+    "INSERT INTO users (email, password_hash, full_name, phone, role) VALUES ($1,$2,$3,$4,$5) RETURNING id,email,role,full_name",
+    [payload.email, passwordHash, payload.fullName, payload.phone ?? null, "REGISTERED_USER"]
   );
   const user = result.rows[0]!;
-  response.status(201).json({ data: { user, accessToken: signAccessToken(user), refreshToken: signRefreshToken(user) } });
+  const tokenUser = { id: user.id, email: user.email, role: user.role };
+  response.status(201).json({ data: { user: { id: user.id, email: user.email, fullName: user.full_name, role: user.role }, accessToken: signAccessToken(tokenUser), refreshToken: signRefreshToken(tokenUser) } });
 }));
 
 authRouter.post("/login", asyncRoute(async (request, response) => {

@@ -30,13 +30,13 @@ const farmSchema = z.object({
 
 const animalSchema = z.object({
   ownerId: z.string().uuid(),
-  farmId: z.string().uuid().optional(),
-  name: z.string().optional(),
+  farmId: z.preprocess((value) => value === "" ? undefined : value, z.string().uuid().optional()),
+  name: z.preprocess((value) => value === "" ? undefined : value, z.string().optional()),
   animalId: z.string().min(3),
-  microchipNumber: z.string().optional(),
+  microchipNumber: z.preprocess((value) => value === "" ? undefined : value, z.string().optional()),
   category: z.string().min(2),
   breed: z.string().min(2),
-  birthDate: z.string().optional(),
+  birthDate: z.preprocess((value) => value === "" ? undefined : value, z.string().optional()),
   weightKg: z.coerce.number().optional(),
   healthStatus: z.string().default("Healthy")
 });
@@ -51,6 +51,17 @@ const stationSchema = z.object({
   openingHours: z.string().default("08:00-18:00"),
   emergencyContact: z.string().min(6),
   rating: z.coerce.number().min(0).max(5).default(4.5)
+});
+
+const veterinarianSchema = z.object({
+  userId: z.string().uuid(),
+  licenseNumber: z.string().min(3),
+  specializations: z.array(z.string()).default([]),
+  experienceYears: z.coerce.number().int().min(0).default(0),
+  workingHours: z.preprocess((value) => typeof value === "string" ? { monFri: value } : value, z.record(z.string()).default({ monFri: "08:00-16:00" })),
+  emergencyAvailable: z.boolean().default(false),
+  onlineConsultation: z.boolean().default(false),
+  rating: z.coerce.number().min(0).max(5).default(4.8)
 });
 
 const premiumSchema = z.object({
@@ -94,6 +105,18 @@ adminRouter.post("/users", asyncRoute(async (request, response) => {
   response.status(201).json({ data: result.rows[0] });
 }));
 
+adminRouter.patch("/users/:id/role", asyncRoute(async (request, response) => {
+  const payload = z.object({ role: z.enum(userRoles), verified: z.boolean().optional() }).parse(request.body);
+  const result = await query(
+    "UPDATE users SET role = $1, verified = coalesce($2, verified), updated_at = now() WHERE id = $3 RETURNING id,email,full_name,role,verified,city,updated_at",
+    [payload.role, payload.verified, request.params.id]
+  );
+  if (!result.rowCount) return response.status(404).json({ error: "User not found" });
+  await query("INSERT INTO audit_logs (actor_id, action, entity, entity_id, metadata) VALUES ($1,'UPDATE_ROLE','users',$2,$3)", [request.user!.id, request.params.id, { role: payload.role, verified: payload.verified }]);
+  await query("INSERT INTO notifications (user_id, title, body, channel) VALUES ($1,'Uloga promijenjena',$2,'REALTIME')", [request.params.id, `Admin je dodijelio novu ulogu: ${payload.role}`]);
+  response.json({ data: result.rows[0] });
+}));
+
 adminRouter.post("/farms", asyncRoute(async (request, response) => {
   const payload = farmSchema.parse(request.body);
   const result = await query(
@@ -128,6 +151,21 @@ adminRouter.post("/veterinary-stations", asyncRoute(async (request, response) =>
   response.status(201).json({ data: result.rows[0] });
 }));
 
+adminRouter.post("/veterinarians", asyncRoute(async (request, response) => {
+  const payload = veterinarianSchema.parse(request.body);
+  await query("UPDATE users SET role = 'VETERINARIAN', verified = true WHERE id = $1", [payload.userId]);
+  const result = await query(
+    `INSERT INTO veterinarians (user_id, license_number, specializations, experience_years, working_hours, emergency_available, online_consultation, rating)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+     ON CONFLICT (license_number) DO UPDATE SET specializations = EXCLUDED.specializations, experience_years = EXCLUDED.experience_years, working_hours = EXCLUDED.working_hours, emergency_available = EXCLUDED.emergency_available, online_consultation = EXCLUDED.online_consultation, rating = EXCLUDED.rating
+     RETURNING *`,
+    [payload.userId, payload.licenseNumber, payload.specializations, payload.experienceYears, JSON.stringify(payload.workingHours), payload.emergencyAvailable, payload.onlineConsultation, payload.rating]
+  );
+  await query("INSERT INTO notifications (user_id, title, body, channel) VALUES ($1,'Veterinar profil aktiviran','Admin je aktivirao veterinarski profil i termin rezervacije.','REALTIME')", [payload.userId]);
+  await query("INSERT INTO audit_logs (actor_id, action, entity, entity_id, metadata) VALUES ($1,'CREATE','veterinarians',$2,$3)", [request.user!.id, result.rows[0]!.id, { licenseNumber: payload.licenseNumber }]);
+  response.status(201).json({ data: result.rows[0] });
+}));
+
 adminRouter.post("/listings", asyncRoute(async (request, response) => {
   const payload = listingSchema.parse(request.body);
   const ownerId = z.string().uuid().parse(request.body.ownerId);
@@ -143,7 +181,7 @@ adminRouter.post("/listings", asyncRoute(async (request, response) => {
 
 adminRouter.post("/premium", asyncRoute(async (request, response) => {
   const payload = premiumSchema.parse(request.body);
-  const amount = payload.months * 10;
+  const amount = payload.months * 5;
   const [subscription, payment] = await Promise.all([
     query(
       `INSERT INTO subscriptions (user_id, plan, status, current_period_end)
@@ -159,7 +197,7 @@ adminRouter.post("/premium", asyncRoute(async (request, response) => {
   ]);
   await query(
     `INSERT INTO notifications (user_id, title, body, channel)
-     VALUES ($1,'Premium aktiviran','Aktiviran je Premium Full paket: 10 KM mjesecno, izdvojeni oglasi i veca vidljivost.','REALTIME')`,
+     VALUES ($1,'Premium aktiviran','Aktiviran je Full Access paket: 5 KM mjesecno, izdvojeni oglasi, analitika i veca vidljivost.','REALTIME')`,
     [payload.userId]
   );
   await query("INSERT INTO audit_logs (actor_id, action, entity, entity_id, metadata) VALUES ($1,'CREATE','premium',$2,$3)", [request.user!.id, payload.userId, { amount, months: payload.months }]);

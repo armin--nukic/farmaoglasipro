@@ -1,9 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#f8fafc"/>
-  <rect x="70" y="70" width="1060" height="490" rx="26" fill="#2E7D32"/>
-  <text x="110" y="210" font-family="Arial, sans-serif" font-size="72" font-weight="900" fill="#fff">FARMA OGLASI PRO</text>
-  <text x="110" y="300" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#F9A825">Stoka, farme, oprema i veterinari u BiH</text>
-  <text x="110" y="380" font-family="Arial, sans-serif" font-size="28" fill="#fff">Kupujte, prodajte, rezervisite i pratite zdravlje zivotinja.</text>
-  <circle cx="990" cy="395" r="82" fill="#F9A825"/>
-  <path d="M920 395h140v34H920zM946 388v-72l44-36 44 36v72h-34v-43h-20v43z" fill="#fff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0B1710"/>
+  <rect x="72" y="72" width="1056" height="486" rx="34" fill="#E9F7EC"/>
+  <image href="/logo.svg" x="110" y="118" width="138" height="138"/>
+  <text x="280" y="166" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="900" fill="#0B1710">FARMA OGLASI PRO</text>
+  <text x="282" y="226" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" fill="#2E7D32">Stoka, farme, oprema, veterinari i forum u BiH</text>
+  <path d="M120 444c190-82 320-76 470-18 155 60 320 34 490-42v118H120Z" fill="#2E7D32"/>
+  <path d="M716 352h146v78H716z" fill="#F5C542"/>
+  <circle cx="748" cy="444" r="34" fill="#263238"/>
+  <circle cx="840" cy="444" r="34" fill="#263238"/>
+  <path d="M420 430c28-90 164-92 196 0H420Z" fill="#FFF8E1"/>
+  <circle cx="484" cy="382" r="22" fill="#6D4C41"/>
+  <circle cx="558" cy="382" r="22" fill="#6D4C41"/>
 </svg>

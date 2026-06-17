@@ -62,6 +62,37 @@ listingsRouter.post("/", requireAuth, asyncRoute(async (request, response) => {
   response.status(201).json({ data: result.rows[0] });
 }));
 
+listingsRouter.get("/:id/comments", asyncRoute(async (request, response) => {
+  const result = await query(
+    `SELECT c.*, json_build_object('id', u.id, 'fullName', u.full_name, 'role', u.role, 'verified', u.verified) AS user
+     FROM listing_comments c
+     JOIN users u ON u.id = c.user_id
+     WHERE c.listing_id = $1
+     ORDER BY c.created_at DESC
+     LIMIT 100`,
+    [request.params.id]
+  );
+  response.json({ data: result.rows });
+}));
+
+listingsRouter.post("/:id/comments", requireAuth, asyncRoute(async (request, response) => {
+  const body = String(request.body.body ?? "").trim();
+  if (body.length < 2) return response.status(422).json({ error: "Comment is required" });
+  const listing = await query<{ id: string; owner_id: string; title: string }>("SELECT id, owner_id, title FROM listings WHERE id = $1", [request.params.id]);
+  if (!listing.rowCount) return response.status(404).json({ error: "Listing not found" });
+  const comment = await query(
+    "INSERT INTO listing_comments (listing_id, user_id, body) VALUES ($1,$2,$3) RETURNING *",
+    [request.params.id, request.user!.id, body]
+  );
+  if (listing.rows[0]!.owner_id !== request.user!.id) {
+    await query(
+      "INSERT INTO notifications (user_id, title, body, channel) VALUES ($1,$2,$3,'REALTIME')",
+      [listing.rows[0]!.owner_id, "Novi komentar na oglas", `Neko je komentarisao oglas: ${listing.rows[0]!.title}`]
+    );
+  }
+  response.status(201).json({ data: comment.rows[0] });
+}));
+
 listingsRouter.patch("/:id/renew", requireAuth, asyncRoute(async (request, response) => {
   const result = await query("UPDATE listings SET expires_at = now() + interval '60 days', published_at = now() WHERE id = $1 AND owner_id = $2 RETURNING *", [request.params.id, request.user!.id]);
   await invalidate("listings:*");

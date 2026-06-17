@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="FARMA OGLASI PRO">
+  <defs>
+    <linearGradient id="shield" x1="34" y1="22" x2="222" y2="232" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#164B2C"/>
+      <stop offset=".55" stop-color="#2E7D32"/>
+      <stop offset="1" stop-color="#7CB342"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="72" y1="62" x2="198" y2="208" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE08A"/>
+      <stop offset="1" stop-color="#F5B72F"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="#07120C"/>
+  <path d="M128 25 213 58v64c0 55-33 91-85 111-52-20-85-56-85-111V58l85-33Z" fill="url(#shield)"/>
+  <path d="M65 111 128 67l63 44v77h-39v-48H104v48H65v-77Z" fill="#F7FFF7"/>
+  <path d="M53 111 128 58l75 53h-29l-46-32-46 32H53Z" fill="url(#gold)"/>
+  <path d="M92 171c12-26 59-26 72 0H92Z" fill="#164B2C"/>
+  <circle cx="112" cy="151" r="10" fill="#F5B72F"/>
+  <circle cx="146" cy="151" r="10" fill="#F5B72F"/>
+  <path d="M102 128c13-14 39-14 52 0" stroke="#164B2C" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path d="M84 96h18v20H84zM154 96h18v20h-18z" fill="#2E7D32"/>
+</svg>

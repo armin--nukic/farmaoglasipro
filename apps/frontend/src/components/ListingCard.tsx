@@ -16,11 +16,12 @@ export function ListingCard({ listing }: { listing: Listing }) {
   const imageUrls = rawListing.imageUrls ?? rawListing.image_urls ?? [];
   const owner = rawListing.owner ?? { id: "", fullName: "FARMA OGLASI PRO", verified: false, role: "REGISTERED_USER" as const };
   const ownerName = owner.fullName ?? owner.full_name ?? "FARMA OGLASI PRO";
+  const fallbackImage = listing.type === "EQUIPMENT" ? "/marketing-marketplace.png" : listing.type === "REAL_ESTATE" ? "/farma-hero-pro.png" : listing.category?.toLowerCase().includes("horse") ? "/listing-horse.png" : listing.category?.toLowerCase().includes("goat") ? "/listing-goats.png" : "/listing-sheep.png";
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="market-card-hover overflow-hidden">
       <div className="aspect-[4/3] bg-slate-200">
-        <img src={imageUrls[0] ?? "/pwa.svg"} alt={listing.title} className="h-full w-full object-cover" />
+        <img src={imageUrls[0] ?? fallbackImage} alt={listing.title} className="h-full w-full object-cover" />
       </div>
       <div className="space-y-3 p-4">
         <div className="flex flex-wrap gap-2">

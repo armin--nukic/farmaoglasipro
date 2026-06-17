@@ -17,6 +17,7 @@ export async function authApi<T>(path: string, token: string, init?: RequestInit
     ...init,
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
       ...init?.headers
     }
   });

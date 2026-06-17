@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-label="Farma, stoka i oprema">
+  <rect width="900" height="620" rx="34" fill="#E9F7EC"/>
+  <path d="M0 420c160-74 290-76 430-20s270 44 470-34v254H0Z" fill="#7CB342"/>
+  <path d="M0 480c200-52 370-58 540-10 120 34 230 38 360 8v142H0Z" fill="#2E7D32"/>
+  <path d="M132 335h215v135H132z" fill="#8D4E2A"/>
+  <path d="M105 335l135-105 135 105H105Z" fill="#C62828"/>
+  <path d="M205 470v-78h67v78Z" fill="#F5C542"/>
+  <path d="M600 356h116v68H600z" fill="#F5C542"/>
+  <circle cx="626" cy="438" r="31" fill="#263238"/>
+  <circle cx="704" cy="438" r="31" fill="#263238"/>
+  <path d="M555 330h110v28H555z" fill="#2E7D32"/>
+  <path d="M475 430c22-75 137-76 165 0H475Z" fill="#FFF8E1"/>
+  <circle cx="528" cy="390" r="18" fill="#6D4C41"/>
+  <circle cx="590" cy="390" r="18" fill="#6D4C41"/>
+  <path d="M520 355c18-19 66-19 84 0" stroke="#6D4C41" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <circle cx="700" cy="130" r="58" fill="#F5C542"/>
+  <path d="M110 150c75-52 162-48 228 5 62-42 132-39 198 3" stroke="#fff" stroke-width="28" stroke-linecap="round" fill="none" opacity=".9"/>
+</svg>
