@@ -8,6 +8,7 @@ import { Input } from "../components/ui/input";
 import { api, authApi } from "../lib/api";
 import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
+import { Seo } from "../lib/seo";
 
 type ForumPost = {
   id: string;
@@ -71,13 +72,18 @@ export function ForumPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8">
+      <Seo
+        title="Forum za farme i poljoprivredu | FARMA OGLASI PRO"
+        description="Forum za pitanja o uzgoju, opremi, veterinarima, farmama, oglasima i iskustvima korisnika."
+        canonicalPath="/forum"
+      />
       <section className="rise-in mb-6 grid gap-4 rounded-[28px] bg-slate-950 p-5 text-white lg:grid-cols-[1fr_320px]">
         <div>
           <div className="inline-flex items-center gap-2 rounded-md bg-accent px-3 py-2 text-sm font-black text-slate-950"><Sparkles size={16} />Zajednica FARMA OGLASI PRO</div>
           <h1 className="mt-4 text-4xl font-black">{t.forum}</h1>
           <p className="mt-3 max-w-2xl text-slate-300">Pitanja o uzgoju, opremi, veterinarima, farmama i iskustvima korisnika na jednom mjestu. Kratki savjeti, realna iskustva i brzi komentari bez lutanja po grupama.</p>
         </div>
-        <img src="/marketing-marketplace.png" alt="Forum i marketplace zajednica" className="soft-float h-full min-h-56 w-full rounded-2xl object-cover" />
+        <img src="/marketing-marketplace.png" alt="Forum i zajednica FARMA OGLASI PRO" className="soft-float h-full min-h-56 w-full rounded-2xl object-cover" />
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[380px_1fr]">

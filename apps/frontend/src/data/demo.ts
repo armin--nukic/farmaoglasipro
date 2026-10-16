@@ -45,7 +45,7 @@ export const demoListings: Listing[] = [
     type: "EQUIPMENT",
     category: "TRACTORS",
     location: "Bijeljina",
-    imageUrls: ["/listing-horse.png"],
+    imageUrls: ["/listing-imt-539.svg"],
     videoUrls: [],
     owner: { id: "u2", fullName: "Agro Komerc", phone: "+38762123456", verified: true, role: "PREMIUM_USER" },
     views: 954,

@@ -3,6 +3,9 @@ import { Header } from "./components/layout/Header";
 import { AppointmentsPage } from "./pages/AppointmentsPage";
 import { AuthPage } from "./pages/AuthPage";
 import { AuctionsPage } from "./pages/AuctionsPage";
+import { AboutPage } from "./pages/AboutPage";
+import { CategoriesPage } from "./pages/CategoriesPage";
+import { ContactPage } from "./pages/ContactPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { CreateListingPage } from "./pages/CreateListingPage";
 import { FarmsPage } from "./pages/FarmsPage";
@@ -20,6 +23,9 @@ export function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/equipment" element={<ListingsPage type="EQUIPMENT" />} />
         <Route path="/farms" element={<FarmsPage />} />

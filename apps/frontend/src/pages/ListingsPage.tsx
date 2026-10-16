@@ -7,6 +7,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { api } from "../lib/api";
 import { demoListings } from "../data/demo";
+import { Seo } from "../lib/seo";
 import { useI18n } from "../i18n";
 
 export function ListingsPage({ type }: { type?: string }) {
@@ -30,6 +31,7 @@ export function ListingsPage({ type }: { type?: string }) {
     const text = `${listing.title} ${listing.description} ${listing.category} ${listing.location}`.toLowerCase();
     return matchesType && (!initialQ || text.includes(initialQ.toLowerCase()));
   });
+  const pageTitle = type === "EQUIPMENT" ? "Poljoprivredna oprema i traktori" : type === "REAL_ESTATE" ? "Farme i zemljiste" : "Oglasi za stoku i farme";
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -42,10 +44,15 @@ export function ListingsPage({ type }: { type?: string }) {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8">
+      <Seo
+        title={`${pageTitle} | FARMA OGLASI PRO`}
+        description="Pretrazite provjerene oglase za stoku, farme, traktore, opremu i poljoprivredne usluge u Bosni i Hercegovini."
+        canonicalPath={type === "EQUIPMENT" ? "/equipment" : "/listings"}
+      />
       <form className="mb-5 grid gap-3 lg:grid-cols-[1fr_auto_auto_auto]" onSubmit={submit}>
         <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t.searchPlaceholder} />
-        <select className="h-10 rounded-md border border-border bg-white px-3 text-sm"><option>All cities</option><option>Sarajevo</option><option>Tuzla</option></select>
-        <select className="h-10 rounded-md border border-border bg-white px-3 text-sm"><option>All categories</option><option>CATTLE</option><option>TRACTORS</option><option>FARMS</option></select>
+        <select className="h-10 rounded-md border border-border bg-white px-3 text-sm dark:bg-[#102017]"><option>Svi gradovi</option><option>Sarajevo</option><option>Tuzla</option><option>Bijeljina</option></select>
+        <select className="h-10 rounded-md border border-border bg-white px-3 text-sm dark:bg-[#102017]"><option>Sve kategorije</option><option>Goveda</option><option>Traktori</option><option>Farme</option></select>
         <Button>{t.search}</Button>
       </form>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

@@ -9,6 +9,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
+import { Seo } from "../lib/seo";
 
 function vetName(item: Veterinarian | VeterinaryStation) {
   if ("fullName" in item) return item.fullName;
@@ -58,6 +59,11 @@ export function VeterinariansPage({ stations = false }: { stations?: boolean }) 
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8">
+      <Seo
+        title={`${stations ? "Veterinarske stanice" : "Veterinari"} | FARMA OGLASI PRO`}
+        description="Pregled veterinara i veterinarskih stanica sa lokacijom, licencama, uslugama, pozivom i rezervacijom termina."
+        canonicalPath={stations ? "/stations" : "/veterinarians"}
+      />
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-3xl font-black">{stations ? "Veterinarske stanice" : "Veterinari"}</h1>
@@ -72,7 +78,7 @@ export function VeterinariansPage({ stations = false }: { stations?: boolean }) 
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-xl font-black">{vetName(item)}</h2>
-                <p className="mt-1 flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"><MapPin size={15} />{itemCity(item)} | Rating {item.rating}</p>
+                <p className="mt-1 flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"><MapPin size={15} />{itemCity(item)} | Ocjena {item.rating}</p>
               </div>
               <div className="rounded-md bg-primary/10 p-2 text-primary"><Stethoscope /></div>
             </div>
@@ -89,7 +95,7 @@ export function VeterinariansPage({ stations = false }: { stations?: boolean }) 
             </div>
             {bookingFor === item.id && !stations && (
               <form className="mt-4 grid gap-3 rounded-md bg-slate-50 p-3 dark:bg-white/5" onSubmit={(event) => book(event, item.id)}>
-                <Input name="animalId" placeholder="Animal ID / ID grla" required />
+                <Input name="animalId" placeholder="ID grla" required />
                 <Input name="scheduledAt" type="datetime-local" required />
                 <Input name="reason" placeholder="Razlog posjete" required />
                 <Button>{bookText}</Button>

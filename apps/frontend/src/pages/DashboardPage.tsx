@@ -46,7 +46,7 @@ export function DashboardPage() {
 
   async function submit(path: string, body: Record<string, unknown>, method = "POST") {
     if (!token) {
-      setStatus("Login as admin first.");
+      setStatus("Prvo se prijavi kao admin.");
       return;
     }
     await authApi<ApiResponse<unknown>>(path, token, { method, body: JSON.stringify(body) });
@@ -118,12 +118,12 @@ export function DashboardPage() {
   }
 
   const stats = [
-    { Icon: Users, title: "Users", body: "Roles, verification, breeder and vet approvals" },
-    { Icon: FileText, title: "Listings", body: "Create, renew, featured and urgent marketplace inventory" },
-    { Icon: CreditCard, title: "Premium", body: "Premium Full: 5 KM monthly, verified and featured visibility" },
-    { Icon: LineChart, title: "Analytics", body: "Views, favorites, revenue, conversions and breeds" },
-    { Icon: Activity, title: "Reports", body: "Fraud, spam, disputes and audit log workflow" },
-    { Icon: Settings, title: "SEO", body: "Meta, sitemap, schema, OG and local search signals" }
+    { Icon: Users, title: "Korisnici", body: "Role, verifikacija, odobrenja uzgajivaca i veterinara" },
+    { Icon: FileText, title: "Oglasi", body: "Kreiranje, obnova, izdvojeni i hitni oglasi" },
+    { Icon: CreditCard, title: "Premium", body: "Premium Full: 5 KM mjesecno, verifikacija i izdvojena vidljivost" },
+    { Icon: LineChart, title: "Analitika", body: "Pregledi, favoriti, prihodi, konverzije i rase" },
+    { Icon: Activity, title: "Prijave", body: "Prevara, spam, sporovi i audit log" },
+    { Icon: Settings, title: "SEO", body: "Meta tagovi, sitemap, schema, OG i lokalna pretraga" }
   ];
 
   return (
@@ -139,7 +139,7 @@ export function DashboardPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-3xl font-black">{t.adminDashboard}</h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{user ? `${user.email} | ${user.role}` : "Login required"}</p>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{user ? `${user.email} | ${user.role}` : "Potrebna je prijava"}</p>
         </div>
         <div className="inline-flex items-center gap-2 rounded-md bg-accent/20 px-3 py-2 text-sm font-black"><BadgeCheck size={16} />{t.premiumFull}: 5 KM / mjesec</div>
       </div>
@@ -166,7 +166,7 @@ export function DashboardPage() {
         </Card>
 
         <Card className="p-5">
-          {!token && <div className="mb-4 flex items-center gap-2 rounded-md bg-danger/10 p-3 text-sm font-bold text-danger"><ShieldAlert size={18} />Login as superadmin/admin to save data.</div>}
+          {!token && <div className="mb-4 flex items-center gap-2 rounded-md bg-danger/10 p-3 text-sm font-bold text-danger"><ShieldAlert size={18} />Prijavi se kao superadmin/admin za spremanje podataka.</div>}
           {status && <div className="mb-4 rounded-md bg-primary/10 p-3 text-sm font-bold text-primary">{status}</div>}
 
           {tab === "user" && (
@@ -186,7 +186,7 @@ export function DashboardPage() {
               <div className="md:col-span-2 rounded-md bg-primary/10 p-4 text-sm font-bold text-primary">
                 Admin ovdje dodjeljuje role i verifikaciju. Korisnik dobija notifikaciju u aplikaciji; email slanje se veze preko SMTP/Resend postavki u produkciji.
               </div>
-              <Field label="User ID" name="userId" />
+              <Field label="ID korisnika" name="userId" />
               <label className="grid gap-1 text-sm font-bold">{t.role}<select name="role" className="h-10 rounded-md border border-border bg-white px-3 dark:bg-[#102017]">{userRoles.map((role) => <option key={role}>{role}</option>)}</select></label>
               <label className="flex items-center gap-2 text-sm font-bold md:col-span-2"><input name="verified" type="checkbox" defaultChecked />{t.verifiedSeller}</label>
               <Button className="md:col-span-2"><ShieldCheck size={18} />{t.save}</Button>
@@ -207,9 +207,9 @@ export function DashboardPage() {
           {tab === "veterinarian" && (
             <form className="grid gap-3 md:grid-cols-2" onSubmit={handleVeterinarian}>
               <div className="md:col-span-2 rounded-md bg-primary/10 p-4 text-sm font-bold text-primary">
-                Prvo kreiraj korisnika, zatim ovdje unesi njegov User ID. Sistem mu dodjeljuje rolu VETERINARIAN i aktivira booking/call/online prikaz.
+                Prvo kreiraj korisnika, zatim ovdje unesi njegov ID. Sistem mu dodjeljuje rolu VETERINARIAN i aktivira rezervaciju, poziv i online prikaz.
               </div>
-              <Field label="User ID" name="userId" />
+              <Field label="ID korisnika" name="userId" />
               <Field label="Broj licence" name="licenseNumber" defaultValue={`VET-${Date.now()}`} />
               <Field label="Specijalizacije" name="specializations" defaultValue="Goveda, Ovce, Hitne intervencije" />
               <Field label="Iskustvo godina" name="experienceYears" type="number" defaultValue="8" />
@@ -225,12 +225,12 @@ export function DashboardPage() {
             <form className="grid gap-3 md:grid-cols-2" onSubmit={handleStation}>
               <Field label={t.name} name="name" defaultValue="Nova veterinarska stanica" />
               <Field label={t.city} name="city" defaultValue="Sarajevo" />
-              <Field label="Address" name="address" defaultValue="Adresa 1" />
-              <Field label="Latitude" name="latitude" defaultValue="43.8563" />
-              <Field label="Longitude" name="longitude" defaultValue="18.4131" />
-              <Field label="Services comma-separated" name="services" defaultValue="Vakcinacija,Hitne intervencije,Terenski izlazak" />
-              <Field label="Opening hours" name="openingHours" defaultValue="08:00-18:00" />
-              <Field label="Emergency contact" name="emergencyContact" defaultValue="+38761111222" />
+              <Field label="Adresa" name="address" defaultValue="Adresa 1" />
+              <Field label="Geografska sirina" name="latitude" defaultValue="43.8563" />
+              <Field label="Geografska duzina" name="longitude" defaultValue="18.4131" />
+              <Field label="Usluge odvojene zarezom" name="services" defaultValue="Vakcinacija,Hitne intervencije,Terenski izlazak" />
+              <Field label="Radno vrijeme" name="openingHours" defaultValue="08:00-18:00" />
+              <Field label="Hitni kontakt" name="emergencyContact" defaultValue="+38761111222" />
               <Button className="md:col-span-2">{t.save}</Button>
             </form>
           )}
@@ -240,8 +240,8 @@ export function DashboardPage() {
               <Field label={t.ownerId} name="ownerId" />
               <Field label={t.name} name="name" defaultValue="Nova farma" />
               <Field label={t.city} name="city" defaultValue="Travnik" />
-              <Field label="Latitude" name="latitude" defaultValue="44.226" required={false} />
-              <Field label="Longitude" name="longitude" defaultValue="17.665" required={false} />
+              <Field label="Geografska sirina" name="latitude" defaultValue="44.226" required={false} />
+              <Field label="Geografska duzina" name="longitude" defaultValue="17.665" required={false} />
               <label className="grid gap-1 text-sm font-bold md:col-span-2">{t.description}<textarea name="description" className="min-h-24 rounded-md border border-border bg-white p-3 dark:bg-[#102017]" defaultValue="Porodicna farma sa kvalitetnim uzgojem i urednom dokumentacijom." required /></label>
               <Button className="md:col-span-2">{t.save}</Button>
             </form>
@@ -250,15 +250,15 @@ export function DashboardPage() {
           {tab === "animal" && (
             <form className="grid gap-3 md:grid-cols-2" onSubmit={handleAnimal}>
               <Field label={t.ownerId} name="ownerId" />
-              <Field label="Farm ID" name="farmId" required={false} />
+              <Field label="ID farme" name="farmId" required={false} />
               <Field label={t.name} name="name" defaultValue="Novo grlo" required={false} />
               <Field label={t.animalId} name="animalId" defaultValue={`BA-AN-${Date.now()}`} />
-              <Field label="Microchip" name="microchipNumber" required={false} />
+              <Field label="Mikrocip" name="microchipNumber" required={false} />
               <Field label={t.category} name="category" defaultValue="CATTLE" />
               <Field label={t.breed} name="breed" defaultValue="Simental" />
-              <Field label="Birth date" name="birthDate" type="date" required={false} />
-              <Field label="Weight kg" name="weightKg" defaultValue="350" required={false} />
-              <Field label="Health status" name="healthStatus" defaultValue="Healthy" />
+              <Field label="Datum rodjenja" name="birthDate" type="date" required={false} />
+              <Field label="Tezina kg" name="weightKg" defaultValue="350" required={false} />
+              <Field label="Zdravstveno stanje" name="healthStatus" defaultValue="Zdravo" />
               <Button className="md:col-span-2">{t.save}</Button>
             </form>
           )}
@@ -268,13 +268,13 @@ export function DashboardPage() {
               <Field label={t.ownerId} name="ownerId" />
               <Field label={t.title} name="title" defaultValue="Admin oglas - kvalitetno grlo" />
               <Field label={t.price} name="price" defaultValue="2500" />
-              <Field label="Type" name="type" defaultValue="ANIMAL" />
+              <Field label="Vrsta" name="type" defaultValue="ANIMAL" />
               <Field label={t.category} name="category" defaultValue="CATTLE" />
               <Field label={t.breed} name="breed" defaultValue="Simental" required={false} />
-              <Field label="Gender" name="gender" defaultValue="FEMALE" required={false} />
-              <Field label="Age months" name="ageMonths" defaultValue="18" required={false} />
-              <Field label="Weight kg" name="weightKg" defaultValue="420" required={false} />
-              <Field label="Color" name="color" defaultValue="Smedja" required={false} />
+              <Field label="Spol" name="gender" defaultValue="FEMALE" required={false} />
+              <Field label="Starost u mjesecima" name="ageMonths" defaultValue="18" required={false} />
+              <Field label="Tezina kg" name="weightKg" defaultValue="420" required={false} />
+              <Field label="Boja" name="color" defaultValue="Smedja" required={false} />
               <Field label={t.location} name="location" defaultValue="Travnik" />
               <Field label={t.phone} name="phone" defaultValue="+38761111222" required={false} />
               <label className="flex items-center gap-2 text-sm font-bold"><input name="featured" type="checkbox" />{t.featured}</label>
@@ -287,9 +287,9 @@ export function DashboardPage() {
           {tab === "premium" && (
             <form className="grid gap-3 md:grid-cols-2" onSubmit={handlePremium}>
               <div className="md:col-span-2 rounded-md bg-accent/20 p-4 text-sm font-bold">{t.premiumBenefits}</div>
-              <Field label="User ID" name="userId" />
-              <Field label="Months" name="months" type="number" defaultValue="1" />
-              <Field label="Provider" name="provider" defaultValue="MANUAL_ADMIN" />
+              <Field label="ID korisnika" name="userId" />
+              <Field label="Broj mjeseci" name="months" type="number" defaultValue="1" />
+              <Field label="Nacin placanja" name="provider" defaultValue="MANUAL_ADMIN" />
               <Button className="md:col-span-2">{t.activatePremium}</Button>
             </form>
           )}

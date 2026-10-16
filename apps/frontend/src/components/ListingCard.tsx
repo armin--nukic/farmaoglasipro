@@ -16,7 +16,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
   const imageUrls = rawListing.imageUrls ?? rawListing.image_urls ?? [];
   const owner = rawListing.owner ?? { id: "", fullName: "FARMA OGLASI PRO", verified: false, role: "REGISTERED_USER" as const };
   const ownerName = owner.fullName ?? owner.full_name ?? "FARMA OGLASI PRO";
-  const fallbackImage = listing.type === "EQUIPMENT" ? "/marketing-marketplace.png" : listing.type === "REAL_ESTATE" ? "/farma-hero-pro.png" : listing.category?.toLowerCase().includes("horse") ? "/listing-horse.png" : listing.category?.toLowerCase().includes("goat") ? "/listing-goats.png" : "/listing-sheep.png";
+  const fallbackImage = listing.type === "EQUIPMENT" ? "/listing-imt-539.svg" : listing.type === "REAL_ESTATE" ? "/farma-hero-pro.png" : listing.category?.toLowerCase().includes("horse") ? "/listing-horse.png" : listing.category?.toLowerCase().includes("goat") ? "/listing-goats.png" : "/listing-sheep.png";
 
   return (
     <Card className="market-card-hover overflow-hidden">

@@ -6,6 +6,7 @@ import { Button } from "../components/ui/button";
 import { authApi } from "../lib/api";
 import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
+import { Seo } from "../lib/seo";
 
 export function PremiumPage() {
   const { token } = useAuth();
@@ -31,14 +32,19 @@ export function PremiumPage() {
   }
 
   const features = [
-    { Icon: Crown, title: "Featured oglasi", body: "Veca vidljivost u pretrazi i na naslovnoj." },
+    { Icon: Crown, title: "Izdvojeni oglasi", body: "Veca vidljivost u pretrazi i na naslovnoj." },
     { Icon: LineChart, title: t.analytics, body: "Pregledi, favoriti, dostupnost i konverzije." },
     { Icon: Bot, title: "AI opisi", body: "Premium korisnici dobijaju AI generisanje opisa oglasa." },
-    { Icon: ShieldCheck, title: "Verified badge", body: "Jasniji signal kupcima da je profil provjeren." }
+    { Icon: ShieldCheck, title: "Verifikovana oznaka", body: "Jasniji signal kupcima da je profil provjeren." }
   ];
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8">
+      <Seo
+        title="Premium paket 5 KM mjesecno | FARMA OGLASI PRO"
+        description="Aktivirajte premium paket za izdvojene oglase, analitiku, AI opise, verifikovanu oznaku i vecu vidljivost u pretrazi."
+        canonicalPath="/premium"
+      />
       <section className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <div className="rounded-md bg-white p-6 shadow-soft dark:bg-[#102017]">
           <div className="inline-flex items-center gap-2 rounded-md bg-accent/20 px-3 py-2 text-sm font-black"><Sparkles size={16} />{t.freeTrial}: 14 dana</div>
@@ -54,7 +60,7 @@ export function PremiumPage() {
           <img src="/marketing-marketplace.png" alt="FARMA OGLASI PRO desktop i mobilni prikaz" className="mb-4 aspect-[4/3] w-full rounded-md object-cover" />
           <div className="text-sm font-black uppercase text-primary">{t.premiumOnlyFeature}</div>
           <div className="mt-2 text-3xl font-black">5 KM</div>
-          <div className="text-sm text-slate-600 dark:text-slate-300">mjesecno, test mode Monri checkout</div>
+          <div className="text-sm text-slate-600 dark:text-slate-300">mjesecno, Monri test placanje</div>
         </Card>
       </section>
       <section className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

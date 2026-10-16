@@ -8,16 +8,19 @@ import { useAuth } from "../../auth";
 import { authApi } from "../../lib/api";
 
 const nav = [
-  ["/listings", "browseAnimals"],
-  ["/farms", "farms"],
-  ["/equipment", "equipment"],
-  ["/veterinarians", "veterinarians"],
-  ["/stations", "veterinaryStations"],
-  ["/auctions", "auctions"],
-  ["/forum", "forum"],
-  ["/premium", "premium"],
-  ["/map", "maps"],
-  ["/admin", "admin"]
+  ["/about", "about", "O nama", "About"],
+  ["/contact", "contact", "Kontakt", "Contact"],
+  ["/categories", "categories", "Kategorije", "Categories"],
+  ["/listings", "browseAnimals", "Zivotinje", "Animals"],
+  ["/farms", "farms", "Farme", "Farms"],
+  ["/equipment", "equipment", "Oprema", "Equipment"],
+  ["/veterinarians", "veterinarians", "Veterinari", "Vets"],
+  ["/stations", "veterinaryStations", "Stanice", "Stations"],
+  ["/auctions", "auctions", "Aukcije", "Auctions"],
+  ["/forum", "forum", "Forum", "Forum"],
+  ["/premium", "premium", "Premium", "Premium"],
+  ["/map", "maps", "Mapa", "Map"],
+  ["/admin", "admin", "Admin", "Admin"]
 ] as const;
 
 type NotificationItem = {
@@ -45,8 +48,8 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-white/95 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur dark:bg-[#0b1710]/95">
-      <div className="mx-auto flex min-h-[76px] max-w-7xl items-center gap-3 px-4 xl:gap-4">
-        <Link to="/" className="flex shrink-0 items-center gap-3 rounded-2xl bg-white/90 px-2 py-2 font-black tracking-wide dark:bg-white/5 lg:min-w-[172px] xl:min-w-[182px]">
+      <div className="mx-auto flex min-h-[74px] max-w-7xl items-center gap-2 px-4 lg:gap-3 2xl:gap-4">
+        <Link to="/" className="flex shrink-0 items-center gap-2 rounded-lg bg-white/90 px-2 py-2 font-black tracking-wide dark:bg-white/5 sm:gap-3 lg:min-w-[158px] 2xl:min-w-[182px]">
           <img src="/logo.svg" alt="FARMA OGLASI PRO" className="h-12 w-12 shrink-0 rounded-xl logo-pulse" />
           <span className="hidden min-w-0 leading-none sm:block">
             <span className="block text-[12px] font-black tracking-[0.12em] text-primary">FARMA</span>
@@ -54,18 +57,18 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 items-center gap-0.5 xl:flex xl:justify-center">
-          {visibleNav.map(([to, key]) => (
-            <NavLink key={to} to={to} className={({ isActive }) => `rounded-md px-2.5 py-2 text-[13px] font-black transition xl:px-3 ${isActive ? "bg-primary/10 text-primary shadow-sm" : "text-slate-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/5"}`}>
-              {t[key]}
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 2xl:flex">
+          {visibleNav.map(([to, , shortBs, shortEn]) => (
+            <NavLink key={to} to={to} className={({ isActive }) => `rounded-md px-2.5 py-2 text-[12px] font-black transition ${isActive ? "bg-primary/10 text-primary shadow-sm" : "text-slate-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/5"}`}>
+              <span>{locale === "bs" ? shortBs : shortEn}</span>
             </NavLink>
           ))}
         </nav>
 
-        <div className="ml-auto flex shrink-0 items-center gap-1.5 xl:gap-2">
-          <button className="hidden h-10 w-10 place-items-center rounded-md border border-border sm:grid" aria-label="Favorites"><Heart size={18} /></button>
+        <div className="ml-auto flex shrink-0 items-center gap-1.5 2xl:gap-2">
+          <button className="hidden h-10 w-10 place-items-center rounded-md border border-border bg-white/70 dark:bg-white/5 lg:grid" aria-label="Favorites"><Heart size={18} /></button>
           <div className="group relative">
-            <button className="relative grid h-10 w-10 place-items-center rounded-md border border-border" aria-label={t.myNotifications}>
+            <button className="relative grid h-10 w-10 place-items-center rounded-md border border-border bg-white/70 dark:bg-white/5" aria-label={t.myNotifications}>
               <Bell size={18} />
               {unread > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-danger px-1 text-[10px] font-black text-white">{unread}</span>}
             </button>
@@ -83,8 +86,8 @@ export function Header() {
               </div>
             </div>
           </div>
-          <button className="inline-flex h-10 items-center gap-1 rounded-md border border-border px-2 text-xs font-black" onClick={() => setLocale(locale === "bs" ? "en" : "bs")} aria-label="Language"><Globe2 size={17} />{locale === "bs" ? "BS" : "EN"}</button>
-          <button className="grid h-10 w-10 place-items-center rounded-md border border-border" onClick={toggleTheme} aria-label={theme === "dark" ? t.lightMode : t.darkMode}>{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}</button>
+          <button className="inline-flex h-10 items-center gap-1 rounded-md border border-border bg-white/70 px-2 text-xs font-black dark:bg-white/5" onClick={() => setLocale(locale === "bs" ? "en" : "bs")} aria-label="Language"><Globe2 size={17} />{locale === "bs" ? "BS" : "EN"}</button>
+          <button className="grid h-10 w-10 place-items-center rounded-md border border-border bg-white/70 dark:bg-white/5" onClick={toggleTheme} aria-label={theme === "dark" ? t.lightMode : t.darkMode}>{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}</button>
           {user ? (
             <div className="group relative hidden sm:block">
               <button className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-3 text-left text-sm font-bold">
@@ -100,14 +103,14 @@ export function Header() {
               </div>
             </div>
           ) : (
-            <Link to="/login" className="hidden h-10 items-center gap-2 rounded-md border border-border px-3 text-sm font-bold lg:inline-flex"><LogIn size={17} />{t.login}</Link>
+            <Link to="/login" className="hidden h-10 items-center gap-2 rounded-md border border-border bg-white/70 px-3 text-sm font-bold dark:bg-white/5 lg:inline-flex"><LogIn size={17} />{t.login}</Link>
           )}
-          <Link to="/create-listing" className="hidden h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-black text-primary-foreground shadow-[0_12px_24px_rgba(46,125,50,0.24)] transition hover:-translate-y-0.5 hover:bg-[#256b2a] lg:inline-flex xl:px-5"><Plus size={18} />{t.createListing}</Link>
-          <button className="grid h-10 w-10 place-items-center rounded-md border border-border xl:hidden" aria-label="Menu"><Menu size={18} /></button>
+          <Link to="/create-listing" className="hidden h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-black text-primary-foreground shadow-[0_12px_24px_rgba(46,125,50,0.24)] transition hover:-translate-y-0.5 hover:bg-[#256b2a] lg:inline-flex 2xl:px-5"><Plus size={18} /><span className="hidden xl:inline">{t.createListing}</span><span className="xl:hidden">Oglas</span></Link>
+          <button className="grid h-10 w-10 place-items-center rounded-md border border-border bg-white/70 dark:bg-white/5 2xl:hidden" aria-label="Menu"><Menu size={18} /></button>
         </div>
       </div>
 
-      <nav className="flex gap-1 overflow-x-auto border-t border-border px-4 py-2 xl:hidden">
+      <nav className="flex gap-1 overflow-x-auto border-t border-border px-4 py-2 2xl:hidden">
         {visibleNav.map(([to, key]) => (
           <NavLink key={to} to={to} className={({ isActive }) => `whitespace-nowrap rounded-md px-3 py-2 text-xs font-black ${isActive ? "bg-primary text-white" : "bg-primary/5 text-primary"}`}>
             {t[key]}
@@ -117,7 +120,7 @@ export function Header() {
       </nav>
 
       <div className="border-t border-primary/10 bg-gradient-to-r from-primary/10 via-white to-accent/20 px-4 py-2 text-xs font-black text-primary dark:from-primary/20 dark:via-[#0b1710] dark:to-accent/10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2"><ShieldCheck size={14} /> {user ? `${t.loggedInAs}: ${user.fullName} | ${user.role}` : "Verified breeder, vet and premium listing workflow ready"} <span className="rounded-md bg-white/80 px-2 py-1 text-[11px] text-slate-700 dark:bg-white/10 dark:text-slate-200">Full Access 5 KM / mjesec</span></div>
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2"><ShieldCheck size={14} /> {user ? `${t.loggedInAs}: ${user.fullName} | ${user.role}` : "Provjereni prodavci, veterinari i premium oglasi spremni za rad"} <span className="rounded-md bg-white/80 px-2 py-1 text-[11px] text-slate-700 dark:bg-white/10 dark:text-slate-200">Premium 5 KM / mjesec</span></div>
       </div>
     </header>
   );

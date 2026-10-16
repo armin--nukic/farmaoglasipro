@@ -9,6 +9,7 @@ import { Input } from "../components/ui/input";
 import { api, authApi } from "../lib/api";
 import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
+import { Seo } from "../lib/seo";
 
 const listingTypes: Array<{ value: ListingType; labelBs: string; labelEn: string }> = [
   { value: "ANIMAL", labelBs: "Zivotinja / grlo", labelEn: "Animal" },
@@ -44,7 +45,7 @@ export function CreateListingPage() {
     event.preventDefault();
     setStatus("");
     if (!token) {
-      setStatus("Login required / Potrebna je prijava.");
+      setStatus("Potrebna je prijava.");
       navigate("/login");
       return;
     }
@@ -83,12 +84,17 @@ export function CreateListingPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8">
+      <Seo
+        title="Objavi oglas | FARMA OGLASI PRO"
+        description="Objavite oglas za zivotinju, traktor, opremu, farmu ili poljoprivredni proizvod uz lokaciju, cijenu i kontakt."
+        canonicalPath="/create-listing"
+      />
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <Card className="p-5">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <div>
               <h1 className="flex items-center gap-2 text-3xl font-black"><ClipboardPlus className="text-primary" />{t.publishListing}</h1>
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{user ? `${t.loggedInAs}: ${user.fullName} (${user.role})` : "Login required"}</p>
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{user ? `${t.loggedInAs}: ${user.fullName} (${user.role})` : "Potrebna je prijava"}</p>
             </div>
             <span className="rounded-md bg-accent/20 px-3 py-2 text-sm font-black">{t.fullAccess}: 5 KM / mjesec</span>
           </div>
@@ -113,7 +119,7 @@ export function CreateListingPage() {
               {t.category}
               <select name="category" className="h-10 rounded-md border border-border bg-white px-3 dark:bg-[#102017]" disabled={Boolean(customCategory)}>
                 {(categories.data?.length ? categories.data : []).map((category) => <option key={category.id} value={category.name}>{category.name}</option>)}
-                {!categories.data?.length && <option>{type === "ANIMAL" ? "Cattle" : type === "EQUIPMENT" ? "Tractors" : type === "REAL_ESTATE" ? "Farms" : "Hay"}</option>}
+                {!categories.data?.length && <option>{type === "ANIMAL" ? "Goveda" : type === "EQUIPMENT" ? "Traktori" : type === "REAL_ESTATE" ? "Farme" : "Sijeno"}</option>}
               </select>
             </label>
             <label className="grid gap-1 text-sm font-bold">

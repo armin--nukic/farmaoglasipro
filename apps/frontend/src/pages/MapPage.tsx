@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Building2, Crosshair, MapPin, Minus, PawPrint, Plus, Stethoscope } from "lucide-react";
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
+import { Seo } from "../lib/seo";
 import { useI18n } from "../i18n";
 
 const markers = [
@@ -13,6 +14,14 @@ const markers = [
   { city: "Mostar", type: "farm", top: 68, left: 58, label: "Farma", Icon: Building2 }
 ];
 
+const typeLabels: Record<string, string> = {
+  all: "Sve",
+  farm: "Farme",
+  animal: "Zivotinje",
+  vet: "Veterinari",
+  station: "Stanice"
+};
+
 export function MapPage() {
   const { t } = useI18n();
   const [zoom, setZoom] = useState(1);
@@ -23,6 +32,11 @@ export function MapPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8">
+      <Seo
+        title="Mapa farmi, veterinara i oglasa | FARMA OGLASI PRO"
+        description="Interaktivna mapa za farme, zivotinje, veterinare i veterinarske stanice u Bosni i Hercegovini."
+        canonicalPath="/map"
+      />
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-3xl font-black">{t.maps}</h1>
@@ -30,17 +44,17 @@ export function MapPage() {
         </div>
         <div className="flex flex-wrap gap-2">
           {["all", "farm", "animal", "vet", "station"].map((item) => (
-            <button key={item} onClick={() => setType(item)} className={`rounded-md px-3 py-2 text-xs font-black ${type === item ? "bg-primary text-white" : "bg-primary/10 text-primary"}`}>{item}</button>
+            <button key={item} onClick={() => setType(item)} className={`rounded-md px-3 py-2 text-xs font-black ${type === item ? "bg-primary text-white" : "bg-primary/10 text-primary"}`}>{typeLabels[item]}</button>
           ))}
         </div>
       </div>
 
-      <Card className="relative min-h-[620px] overflow-hidden bg-[#eef4ef]">
+      <Card className="relative min-h-[520px] overflow-hidden bg-[#eef4ef] sm:min-h-[620px]">
         <div className="absolute left-4 top-4 z-10 flex gap-2">
-          <Button onClick={() => setZoom((value) => Math.min(value + 0.2, 2))}><Plus size={18} /></Button>
-          <Button onClick={() => setZoom((value) => Math.max(value - 0.2, 0.8))}><Minus size={18} /></Button>
+          <Button aria-label="Uvecaj mapu" onClick={() => setZoom((value) => Math.min(value + 0.2, 2))}><Plus size={18} /></Button>
+          <Button aria-label="Smanji mapu" onClick={() => setZoom((value) => Math.max(value - 0.2, 0.8))}><Minus size={18} /></Button>
         </div>
-        <select value={city} onChange={(event) => setCity(event.target.value)} className="absolute right-4 top-4 z-10 h-10 rounded-md border border-border bg-white px-3 text-sm font-black shadow-soft dark:bg-[#102017]">
+        <select value={city} onChange={(event) => setCity(event.target.value)} className="absolute right-4 top-4 z-10 h-10 max-w-[calc(100%-7rem)] rounded-md border border-border bg-white px-3 text-sm font-black shadow-soft dark:bg-[#102017]">
           {cities.map((item) => <option key={item} value={item}>{item === "all" ? "Svi gradovi" : item}</option>)}
         </select>
         <div className="absolute inset-0 origin-center transition-transform duration-300" style={{ transform: `scale(${zoom})` }}>
